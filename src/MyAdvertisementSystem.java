@@ -31,7 +31,7 @@ public class MyAdvertisementSystem implements AdvertisementSystem {
     public void showNextAdvertisement(int dayIndex) {
         boolean end = false;
         //Ha üres az elérhető reklámok listája, akkor kiszámoljuk a listát
-        if(availableAdvertisements.size() ==0) calculateAvailable();
+        if(availableAdvertisements.size() ==0) calculateAvailable(dayIndex);
         //Ciklus, amíg nem sikerül reklámot megjeleníteni, vagy el nem fogy a lista
         while(!end && availableAdvertisements.size()>0){
             //Véletlen szám generálása, mely meghatározza melyik reklámot próbáljuk meg lejátszani
@@ -57,7 +57,7 @@ public class MyAdvertisementSystem implements AdvertisementSystem {
     Megkeresi a legkisebb súlyú reklámot, és az alapján meghatározza, hoyg a többi reklámot
     ugyanannyi idő alatt hányszor kell lejátszani.
      */
-    private void calculateAvailable(){
+    private void calculateAvailable(int dayIndex){
         //Az egység, vagyis a legkisebb súly meghatározása
         double unit = 1.0;
         for (Advertisement ad: advertisementList ) {
@@ -67,9 +67,12 @@ public class MyAdvertisementSystem implements AdvertisementSystem {
         //Lista építése az alapján, hogy időegység alatt a legkisebb súlyhoz képest melyik reklámot hányszor kell leadni.
         //Annyiszor kerül be minden reklám a listába, amennyi a súlyának és az egységnek a hányadosa
         for (Advertisement ad: advertisementList ) {
-            double count = (ad.getWeight()/unit);
-            for (int i=0;i<count; i++){
-                availableAdvertisements.add(ad);
+            //Ellenőrizzük, hogy az adott napra megjeleníthető-e a reklám
+            if(ad.getMaxAppearance() > ad.lastAppearence(dayIndex,1)){
+                double count = (ad.getWeight()/unit);
+                for (int i=0;i<count; i++){
+                    availableAdvertisements.add(ad);
+                }
             }
         }
 

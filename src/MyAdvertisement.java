@@ -2,6 +2,7 @@ import interfaces.Advertisement;
 
 import java.util.Hashtable;
 
+//A saját reklám, ami az Advertisement interface-t implementálja
 public class MyAdvertisement implements Advertisement {
     //A reklám címe
     private String title;
@@ -50,11 +51,13 @@ public class MyAdvertisement implements Advertisement {
     @Override
     //Reklám megjelenítése az adott napon
     public void showAdvertisement(int dayIndex) {
+        //Ha a napra már történt reklám lejátszása, akkor növeljük a megjelenések számát
         if(allAppearances.containsKey(dayIndex)){
             int apps = allAppearances.get(dayIndex);
             apps++;
             allAppearances.replace(dayIndex, apps);
         }
+        //Ha még nem játszottuk le az adott napon, akkor hozzáadjuk az első megjelenést
         else{
             allAppearances.put(dayIndex,1);
         }
